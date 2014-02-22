@@ -7,7 +7,7 @@ An Web UI for xunlei-lixian resource export/sharing
 
 暂时可以拿来在工作室用...上传文件和任务列表中的未完成任务有点bug。
 
-需要修改过的[xunlei-lixian](/phoenixlzx/xunlei-lixian)
+需要修改过的[xunlei-lixian](https://github.com/phoenixlzx/xunlei-lixian)
 
 目前仅支持 aria2 导出。不过加其他的导出命令也不难，该有的参数都有了。
 
