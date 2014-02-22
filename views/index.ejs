@@ -35,13 +35,16 @@
                 <%= task[2] %>
             </td>
             <td>
-                <!-- Single button -->
                 <div class="btn-group">
+                    <% if(task[3] !== 'None') { %>
+                    <!-- single file task -->
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                         导出 <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu">
+
                         <li><a href="#" data-toggle="modal" data-target="#task<%= task[0] %>">Aria2</a></li>
+
                     </ul>
                     <!-- Modal -->
                     <div class="modal fade" id="task<%= task[0] %>" tabindex="-1" role="dialog" aria-labelledby="TaskModal" aria-hidden="true">
@@ -59,6 +62,10 @@
                             </div>
                         </div>
                     </div>
+                    <% } else { %>
+                    <!-- multiple file task -->
+                    <a href="/<%= task[0] %>" class="btn btn-default">查看</a>
+                    <% } %>
                 </div>
             </td>
         </tr>

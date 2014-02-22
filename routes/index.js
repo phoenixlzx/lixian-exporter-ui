@@ -14,7 +14,7 @@ module.exports = function(app) {
     app.get('/', csrf, checkLogin, function(req, res) {
         async.parallel([
             // Get gdriveid
-            function(callback){
+            function(callback) {
                 child = exec('lixian info', function (error, stdout, stderr) {
                     if (error || stderr) {
                         callback(error || stderr, null);
@@ -23,7 +23,7 @@ module.exports = function(app) {
                 });
             },
             // Get tasks list
-            function(callback){
+            function(callback) {
                 child = exec('lixian list --download-url', function (error, stdout, stderr) {
                     if (error || stderr) {
                         callback(error || stderr, null);
@@ -31,7 +31,7 @@ module.exports = function(app) {
                     callback(null, stdout.toString().split("\n"));
                 });
             }
-        ], function(err, data){
+        ], function(err, data) {
             // the results array will equal ['one','two'] even though
             // the second function had a shorter timeout.
             res.render('index', {
@@ -42,6 +42,10 @@ module.exports = function(app) {
             });
         });
     });
+
+    app.get('/:taskid', csrf, checkLogin, function(req, res) {
+
+    })
 
     app.get('/login', csrf, checkNotLogin, function(req, res) {
         res.render('login', {
