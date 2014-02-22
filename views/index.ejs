@@ -1,0 +1,78 @@
+<%-include header%>
+<body>
+<div class="blog-masthead">
+    <div class="container" id="nav">
+        <nav class="blog-nav">
+            <a class="blog-nav-item active" href="/">任务列表</a>
+            <a class="blog-nav-item" href="/addnew">添加新任务</a>
+        </nav>
+    </div>
+</div>
+
+<div class="task-list">
+
+    <table class="table table-hover table-responsive">
+        <thead>
+        <tr>
+            <th>任务ID</th>
+            <th>文件名</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% if(tasks[0]) { %>
+        <% tasks.forEach(function(task) { %>
+        <% task = task.split(" | ") %>
+        <tr>
+            <td>
+                <%= task[0] %>
+            </td>
+            <td>
+                <%= task[1] %>
+            </td>
+            <td>
+                <%= task[2] %>
+            </td>
+            <td>
+                <!-- Single button -->
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        导出 <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#" data-toggle="modal" data-target="#task<%= task[0] %>">Aria2</a></li>
+                    </ul>
+                    <!-- Modal -->
+                    <div class="modal fade" id="task<%= task[0] %>" tabindex="-1" role="dialog" aria-labelledby="TaskModal" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title" id="myModalLabel">导出 Aria2 命令</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="well" style="word-break: break-all;">
+                                        aria2c -x10 -s10 -c --out '<%= task[1] %>' --header 'Cookie: gdriveid=<%= gdriveid %>;' '<%= task[3] %>'
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <% }) %>
+        <% } else { %>
+            <tr>
+                <td colspan="4" style="text-align: center"><strong>暂无任务</strong></td>
+            </tr>
+        <% } %>
+
+        </tbody>
+    </table>
+
+
+</div><!-- /.container -->
+
+<%-include footer%>

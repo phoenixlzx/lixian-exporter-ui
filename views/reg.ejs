@@ -1,0 +1,21 @@
+<%-include header%>
+<body class="signin">
+<div class="container">
+
+    <form class="form-signin" role="form" action="/reg" method="post">
+        <h2 class="form-signin-heading">注册管理员</h2>
+        <input type="hidden" name="_csrf" value="<%= locals.token %>"/>
+        <input type="email" class="form-control" name="email" placeholder="Email address" required autofocus>
+        <input type="password" class="form-control" name="password" placeholder="Password" required>
+        <input type="password" class="form-control" name="repeatPassword" placeholder="Repeat password" required>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">注册</button>
+    </form>
+
+</div> <!-- /container -->
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="js/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<div class="blog-footer">
+    <p><%= siteName %> built with <a href="http://getbootstrap.com">Bootstrap</a> by <a href="https://twitter.com/mdo">@mdo</a>.</p>
+    <p>
+        <a href="#nav">返回顶部</a>
+    <form action="/logout" method="post">
+        <input type="hidden" name="_csrf" value="<%= locals.token %>"/>
+        <a href="javascript:" onclick="parentNode.submit();">登出</a>
+    </form>
+    </p>
+
+    </p>
+</div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="js/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.min.js"></script>
+</body>
+</html>
