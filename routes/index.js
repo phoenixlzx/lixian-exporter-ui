@@ -1,51 +1,90 @@
 var config = require('../config.js');
 
-// var formidable = require('formidable');
+var formidable = require('formidable');
 var crypto = require('crypto');
 var validator = require('validator');
 var async = require('async');
-var exec = require('child_process').exec,
-    child;
+var exec = require('child_process').exec;
 
 var User = require('../models/user.js');
+
+var gdriveid = '';
+
+// Get gdriveid
+exec('lixian info', function (error, stdout, stderr) {
+    if (error || stderr) {
+        callback(error || stderr, null);
+    }
+    gdriveid = stdout.toString().split("\n")[2].split(" ")[1];
+});
 
 module.exports = function(app) {
 
     app.get('/', csrf, checkLogin, function(req, res) {
-        async.parallel([
-            // Get gdriveid
-            function(callback) {
-                child = exec('lixian info', function (error, stdout, stderr) {
-                    if (error || stderr) {
-                        callback(error || stderr, null);
-                    }
-                    callback(null, stdout.toString().split("\n")[2].split(" ")[1]);
-                });
-            },
-            // Get tasks list
-            function(callback) {
-                child = exec('lixian list --download-url', function (error, stdout, stderr) {
-                    if (error || stderr) {
-                        callback(error || stderr, null);
-                    }
-                    callback(null, stdout.toString().split("\n"));
-                });
+        // Get tasks list
+        exec('lixian list --download-url', function(error, stdout, stderr) {
+            if (error || stderr) {
+                console.log(error || stderr);
+                return res.send(500);
             }
-        ], function(err, data) {
-            // the results array will equal ['one','two'] even though
-            // the second function had a shorter timeout.
+            var data =  stdout.toString().split("\n");
+
             res.render('index', {
                 siteName: config.siteName,
                 user: req.session.user,
-                gdriveid: data[0],
-                tasks: data[1]
+                gdriveid: gdriveid,
+                tasks: data
             });
         });
     });
 
-    app.get('/:taskid', csrf, checkLogin, function(req, res) {
+    app.get('/task/:taskid', csrf, checkLogin, function(req, res) {
+        exec('lixian list --download-url ' + req.params.taskid + '/', function(error, stdout, stderr) {
+            if (error || stderr) {
+                console.log(error);
+                return res.send(500);
+            }
+            var data =  stdout.toString().split("\n");
 
-    })
+            res.render('index', {
+                siteName: config.siteName,
+                user: req.session.user,
+                gdriveid: gdriveid,
+                tasks: data
+            });
+        });
+    });
+
+    app.get('/addnew', csrf, checkLogin, function(req, res) {
+        res.render('addnew', {
+            siteName: config.siteName,
+            user: req.session.user
+        });
+    });
+
+    app.post('/addnewlink', csrf, checkLogin, function(req, res) {
+        exec('lixian add ' + req.body.fileLink, function(error, stdout, stderr) {
+            if (error || stderr) {
+                console.log(error);
+                return res.send(500);
+            }
+            res.redirect('/');
+        });
+    });
+
+    app.post('/addnewfile', csrf, checkLogin, function(req, res) {
+        var form = new formidable.IncomingForm();
+
+        form.parse(req, function(err, fields, files) {
+            exec('lixian add --bt ' + files.fileTorrent.path, function(error, stdout, stderr) {
+                if (error || stderr) {
+                    console.log(error);
+                    return res.send(500);
+                }
+                res.redirect('/');
+            });
+        });
+    });
 
     app.get('/login', csrf, checkNotLogin, function(req, res) {
         res.render('login', {

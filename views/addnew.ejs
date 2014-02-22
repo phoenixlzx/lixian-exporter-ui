@@ -1,0 +1,46 @@
+<%-include header%>
+<body>
+<div class="blog-masthead">
+    <div class="container" id="nav">
+        <nav class="blog-nav">
+            <a class="blog-nav-item" href="/">任务列表</a>
+            <a class="blog-nav-item active" href="/addnew">添加新任务</a>
+        </nav>
+    </div>
+</div>
+
+<div class="container" style="padding-top: 1em;">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">添加下载链接</div>
+        <div class="panel-body">
+            <form role="form" method="post" action="/addnewlink">
+                <div class="form-group">
+                    <label for="fileLink">下载链接</label>
+                    <input type="text" class="form-control" id="fileLink" name="fileLink" placeholder="http/https/ftp/metalink/ed2k">
+                    <input type="hidden" name="_csrf" value="<%= locals.token %>"/>
+                </div>
+                <button type="submit" class="btn btn-default">提交</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">添加种子文件</h3>
+        </div>
+        <div class="panel-body">
+            <form role="form" method="post" action="/addnewfile" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="fileTorrent">上传种子</label>
+                    <input type="file" id="fileTorrent" name="fileTorrent">
+                    <input type="hidden" name="_csrf" value="<%= locals.token %>"/>
+                </div>
+                <button type="submit" class="btn btn-default">提交</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<%-include footer%>

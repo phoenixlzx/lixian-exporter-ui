@@ -24,6 +24,7 @@
         <% if(tasks[0]) { %>
         <% tasks.forEach(function(task) { %>
         <% task = task.split(" | ") %>
+        <% if (task[0]) { %>
         <tr>
             <td>
                 <%= task[0] %>
@@ -36,7 +37,10 @@
             </td>
             <td>
                 <div class="btn-group">
-                    <% if(task[3] !== 'None') { %>
+                    <% if(task[3] === 'None') { %>
+                    <!-- multiple file task -->
+                    <a href="/task/<%= task[0] %>" class="btn btn-default">查看</a>
+                    <% } else { %>
                     <!-- single file task -->
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                         导出 <span class="caret"></span>
@@ -62,14 +66,11 @@
                             </div>
                         </div>
                     </div>
-                    <% } else { %>
-                    <!-- multiple file task -->
-                    <a href="/<%= task[0] %>" class="btn btn-default">查看</a>
                     <% } %>
                 </div>
             </td>
         </tr>
-        <% }) %>
+        <% }}) %>
         <% } else { %>
             <tr>
                 <td colspan="4" style="text-align: center"><strong>暂无任务</strong></td>
